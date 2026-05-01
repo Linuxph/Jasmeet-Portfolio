@@ -6,7 +6,8 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
-  webPack: (config, { isServer }) => {
+  turbopack: {},
+  webpack: (config, { isServer, dev }) => {
     if (!isServer) {
       config.module.rules.push({
         test: /\.(tsx|ts|jsx|js)$/,
@@ -14,7 +15,7 @@ const nextConfig = {
         use: [{
           loader: '@locator/webpack-loader',
           options: { 
-            env: 'development'
+            enabled: true
           }
         }]
       });
