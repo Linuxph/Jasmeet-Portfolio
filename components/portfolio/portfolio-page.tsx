@@ -1,8 +1,8 @@
 'use client'
 
 import Image from 'next/image'
-import { useEffect, useState } from 'react'
-import { motion } from 'framer-motion'
+import { useEffect, useRef, useState } from 'react'
+import { motion, useScroll, useTransform } from 'framer-motion'
 import {
   ArrowRight,
   Download,
@@ -89,6 +89,13 @@ function SectionHeading({
 export function PortfolioPage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [activeSection, setActiveSection] = useState('home')
+  const horizontalShowcaseRef = useRef<HTMLElement | null>(null)
+  const { scrollYProgress } = useScroll({
+    target: horizontalShowcaseRef,
+    offset: ['start start', 'end end'],
+  })
+  const horizontalTrackX = useTransform(scrollYProgress, [0, 1], ['0%', '-50%'])
+  const horizontalGlowX = useTransform(scrollYProgress, [0, 1], ['0%', '-18%'])
 
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId)
@@ -337,8 +344,11 @@ export function PortfolioPage() {
             <CardShell className="section-shell project-section-shell">
               <div className="project-section-header">
                 <p className="project-section-kicker">Portfolio</p>
-                <h2 className="project-section-title">My Portfolio</h2>
-                <p className="project-section-copy">A collection of my recent projects</p>
+                <h2 className="project-section-title">Graphic Design Portfolio</h2>
+                <p className="project-section-copy">
+                  Selected branding, print, social, and campaign work shaped for visual
+                  storytelling.
+                </p>
               </div>
 
               <div className="project-board project-board-reference">
@@ -346,16 +356,16 @@ export function PortfolioPage() {
                     <article key={project.title} className="project-thumb-card">
                       <div className={`project-preview project-preview-${project.accent}`}>
                         <div className="project-preview-grid" />
-                        <div className="project-preview-window project-preview-window-reference">
-                          <div className="project-preview-window-top">
-                            <div className="project-preview-bar" />
-                            <div className="project-preview-dots">
-                              <span />
-                              <span />
-                              <span />
-                            </div>
+                        <div className="project-preview-poster project-preview-poster-reference">
+                          <div className="project-preview-poster-label">
+                            <span />
+                            <span />
                           </div>
-                          <div className="project-preview-content" />
+                          <div className="project-preview-poster-title" />
+                          <div className="project-preview-poster-art">
+                            <div className="project-preview-poster-orb" />
+                            <div className="project-preview-poster-card" />
+                          </div>
                           <div className="project-preview-columns">
                             <div className="project-preview-content small" />
                             <div className="project-preview-content small alt" />
@@ -392,7 +402,81 @@ export function PortfolioPage() {
             </CardShell>
           </section>
 
-          <section id="education" className="scroll-section">
+          <section ref={horizontalShowcaseRef} className="horizontal-scroll-section">
+            <div className="horizontal-scroll-sticky">
+              <motion.div className="horizontal-scroll-track" style={{ x: horizontalTrackX }}>
+                <section className="horizontal-panel horizontal-panel-video">
+                  <CardShell className="horizontal-panel-shell">
+                    <motion.div className="horizontal-panel-glow" style={{ x: horizontalGlowX }} />
+                    <div className="horizontal-panel-copy">
+                      <p className="horizontal-panel-kicker">Motion Work</p>
+                      <h2 className="horizontal-panel-title">Video Editing & Visual Reels</h2>
+                      <p className="horizontal-panel-description">
+                        Short-form edits, promo cuts, and mood-driven visual sequences built to
+                        keep the scroll smooth and the pacing memorable.
+                      </p>
+                      <div className="horizontal-feature-list">
+                        <span>Reels & Shorts</span>
+                        <span>Music Sync</span>
+                        <span>Promo Edits</span>
+                      </div>
+                    </div>
+                    <div className="horizontal-visual-stage horizontal-visual-stage-video">
+                      <div className="video-frame video-frame-tall">
+                        <div className="video-frame-top" />
+                        <div className="video-waveform" />
+                        <div className="video-timeline">
+                          <span />
+                          <span />
+                          <span />
+                        </div>
+                      </div>
+                      <div className="floating-caption-card">
+                        <p>Storyboard</p>
+                        <strong>Cut, sync, reveal</strong>
+                      </div>
+                    </div>
+                  </CardShell>
+                </section>
+
+                <section className="horizontal-panel horizontal-panel-ai">
+                  <CardShell className="horizontal-panel-shell">
+                    <motion.div
+                      className="horizontal-panel-glow horizontal-panel-glow-ai"
+                      style={{ x: horizontalGlowX }}
+                    />
+                    <div className="horizontal-panel-copy">
+                      <p className="horizontal-panel-kicker">AI Creative</p>
+                      <h2 className="horizontal-panel-title">AI Videos & Image Generation</h2>
+                      <p className="horizontal-panel-description">
+                        Concept frames, style explorations, and AI-assisted visuals combined into
+                        creative assets that still feel art directed.
+                      </p>
+                      <div className="horizontal-feature-list">
+                        <span>Prompt Styling</span>
+                        <span>Scene Concepts</span>
+                        <span>Campaign Visuals</span>
+                      </div>
+                    </div>
+                    <div className="horizontal-visual-stage horizontal-visual-stage-ai">
+                      <div className="ai-mosaic">
+                        <div className="ai-mosaic-card ai-mosaic-card-large" />
+                        <div className="ai-mosaic-card" />
+                        <div className="ai-mosaic-card ai-mosaic-card-accent" />
+                        <div className="ai-mosaic-card" />
+                      </div>
+                      <div className="floating-caption-card floating-caption-card-ai">
+                        <p>Generated Moodboards</p>
+                        <strong>Frames, texture, style</strong>
+                      </div>
+                    </div>
+                  </CardShell>
+                </section>
+              </motion.div>
+            </div>
+          </section>
+
+          {/* <section id="education" className="scroll-section">
             <CardShell className="section-shell">
               <div className="section-head">
                 <SectionHeading
@@ -444,7 +528,7 @@ export function PortfolioPage() {
                 </div>
               </div>
             </CardShell>
-          </section>
+          </section> */}
 
           <section id="contact" className="scroll-section">
             <CardShell className="section-shell">
