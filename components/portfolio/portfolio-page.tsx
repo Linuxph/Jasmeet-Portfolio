@@ -7,7 +7,6 @@ import {
   ArrowRight,
   Download,
   ExternalLink,
-  Mail,
   Menu,
   Send,
   X,
@@ -23,11 +22,10 @@ import {
   languages,
   navigationItems,
   projects,
+  services,
   skillCards,
   skills,
   socialLinks,
-  stats,
-  timeline,
 } from '@/components/portfolio/data'
 
 const sectionIds = ['home', 'skills', 'projects', 'education', 'contact']
@@ -42,19 +40,15 @@ function CardShell({
   return <div className={`panel-shell ${className}`}>{children}</div>
 }
 
-function FixedNavRail({
+function PanelRail({
   activeSection,
+  onNavigate,
 }: {
   activeSection: string
+  onNavigate: (sectionId: string) => void
 }) {
-  const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId)
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'start' })
-    }
-  }
   return (
-    <nav className="fixed-nav-rail">
+    <div className="panel-rail">
       {navigationItems.map((item) => {
         const Icon = item.icon
         return (
@@ -66,35 +60,8 @@ function FixedNavRail({
             title={item.label}
             onClick={(e) => {
               e.preventDefault()
-              scrollToSection(item.id)
+              onNavigate(item.id)
             }}
-          >
-            <Icon className="h-4 w-4" />
-          </a>
-        )
-      })}
-    </nav>
-  )
-}
-
-function PanelRail({
-  activeSection,
-  compact = false,
-}: {
-  activeSection: string
-  compact?: boolean
-}) {
-  return (
-    <div className={`panel-rail ${compact ? 'panel-rail-compact' : ''}`}>
-      {navigationItems.map((item) => {
-        const Icon = item.icon
-        return (
-          <a
-            key={item.id}
-            href={`#${item.id}`}
-            className={`rail-link ${activeSection === item.id ? 'rail-link-active' : ''}`}
-            aria-label={item.label}
-            title={item.label}
           >
             <Icon className="h-4 w-4" />
           </a>
@@ -112,7 +79,7 @@ function SectionHeading({
   description: string
 }) {
   return (
-    <div className="max-w-xl">
+    <div className="max-w-2xl">
       <h2 className="panel-title">{title}</h2>
       <p className="panel-copy mt-3">{description}</p>
     </div>
@@ -123,27 +90,35 @@ export function PortfolioPage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [activeSection, setActiveSection] = useState('home')
 
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId)
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
+    setMobileMenuOpen(false)
+  }
+
   useEffect(() => {
     const lenis = new Lenis({
       duration: 1,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      direction: 'vertical',
-      gestureDirection: 'vertical',
-      smooth: true,
-      smoothTouch: true,
+      smoothWheel: true,
       touchMultiplier: 2,
       infinite: false,
       autoResize: true,
     })
 
-    function raf(time: number) {
+    let frameId = 0
+
+    const raf = (time: number) => {
       lenis.raf(time)
-      requestAnimationFrame(raf)
+      frameId = window.requestAnimationFrame(raf)
     }
 
-    requestAnimationFrame(raf)
+    frameId = window.requestAnimationFrame(raf)
 
     return () => {
+      window.cancelAnimationFrame(frameId)
       lenis.destroy()
     }
   }, [])
@@ -153,7 +128,11 @@ export function PortfolioPage() {
       (entries) => {
         const visibleEntries = entries.filter((entry) => entry.isIntersecting)
         if (visibleEntries.length === 0) return
-        const visibleEntry = visibleEntries.sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0]
+
+        const visibleEntry = visibleEntries.sort(
+          (a, b) => b.intersectionRatio - a.intersectionRatio,
+        )[0]
+
         if (visibleEntry?.target?.id) {
           setActiveSection(visibleEntry.target.id)
         }
@@ -174,20 +153,14 @@ export function PortfolioPage() {
 
   useEffect(() => {
     if (!mobileMenuOpen) return
+
     const onResize = () => {
       if (window.innerWidth >= 1024) setMobileMenuOpen(false)
     }
+
     window.addEventListener('resize', onResize)
     return () => window.removeEventListener('resize', onResize)
   }, [mobileMenuOpen])
-
-  const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId)
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'start' })
-    }
-    setMobileMenuOpen(false)
-  }
 
   return (
     <main className="portfolio-page">
@@ -196,11 +169,17 @@ export function PortfolioPage() {
       <div className="ambient-orb ambient-orb-right" />
       <div className="ambient-orb ambient-orb-bottom" />
 
-
       <header className="mobile-header">
-        <a href="#home" className="brand-pill">
+        <a
+          href="#home"
+          className="brand-pill"
+          onClick={(e) => {
+            e.preventDefault()
+            scrollToSection('home')
+          }}
+        >
           <span className="brand-dot">J</span>
-          <span>Jasmeet</span>
+          <span>Jasmeet.dev</span>
         </a>
         <button
           type="button"
@@ -233,70 +212,119 @@ export function PortfolioPage() {
 
       <div className="portfolio-shell">
         <aside className="site-rail-wrap">
-          <PanelRail activeSection={activeSection} />
+          <PanelRail activeSection={activeSection} onNavigate={scrollToSection} />
         </aside>
 
         <div className="content-grid">
           <section id="home" className="scroll-section">
-            <CardShell className="hero-panel">
-              <div className="hero-grid">
+            <CardShell className="hero-panel hero-panel-centered">
+              <div className="hero-grid hero-grid-centered">
+                <div className="hero-visual hero-visual-centered">
+                  <div className="hero-avatar-shell hero-avatar-shell-centered">
+                    <div className="hero-avatar-stack hero-avatar-stack-centered">
+                      <div className="hero-avatar-frame hero-avatar-frame-round">
+                        <Image
+                          src={heroImage}
+                          alt="Jasmeet portrait"
+                          className="hero-avatar-image hero-avatar-image-round"
+                          priority
+                        />
+                      </div>
+                      <div className="avatar-glow avatar-glow-cyan" />
+                      <div className="avatar-glow avatar-glow-violet" />
+                    </div>
+                  </div>
+                </div>
+
                 <motion.div
                   initial={{ opacity: 0, y: 18 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.65 }}
-                  className="hero-copy"
+                  className="hero-copy hero-copy-centered"
                 >
-                  <div className="hero-avatar-stack lg:hidden">
-                    <div className="hero-avatar-frame">
-                      <Image src={heroImage} alt="Jasmeet portrait" className="hero-avatar-image" priority />
-                    </div>
-                  </div>
-                  <div className="hero-badges">
-                    {heroBadges.map((badge) => (
+                  <div className="hero-badges hero-badges-centered">
+                    {heroBadges.slice(0, 2).map((badge) => (
                       <span key={badge.label} className={`accent-chip accent-chip-${badge.tone}`}>
                         {badge.label}
                       </span>
                     ))}
                   </div>
-                  <h1 className="hero-title">
+                  <h1 className="hero-title hero-title-centered">
                     Hi, I&apos;m <span>Jasmeet</span>
                   </h1>
-                  <p className="hero-subtitle">I&apos;m a UI/UX Designer & Frontend Developer</p>
-                  <p className="hero-description">
-                    I create beautiful, responsive web experiences using modern technologies with
-                    clean structure, glowing dark visuals, and section-based storytelling.
+                  <p className="hero-subtitle hero-subtitle-centered">
+                    I&apos;m a UI/UX Designer | Frontend Developer
                   </p>
-                  <div className="hero-actions">
-                    <a href="#projects" className="cta-primary">View My Work</a>
-                    <a href="#contact" className="cta-secondary">
-                      <Mail className="h-4 w-4" /> Contact Me
+                  <p className="hero-description">
+                    I create beautiful, responsive web experiences using modern technologies.
+                    Passionate about clean code and user-centered design.
+                  </p>
+                  <div className="hero-actions hero-actions-centered">
+                    <a href="#projects" className="cta-primary" onClick={(e) => {
+                      e.preventDefault()
+                      scrollToSection('projects')
+                    }}>
+                      View My Work <ArrowRight className="h-4 w-4" />
                     </a>
-                    <a href="#" className="cta-secondary">
+                    <a href="#contact" className="cta-secondary" onClick={(e) => {
+                      e.preventDefault()
+                      scrollToSection('contact')
+                    }}>
                       <Download className="h-4 w-4" /> Download CV
                     </a>
                   </div>
-                  <div className="hero-stats">
-                    {stats.map((item) => (
-                      <div key={item.label} className="hero-stat-card">
-                        <p className="hero-stat-value">{item.value}</p>
-                        <p className="hero-stat-label">{item.label}</p>
-                      </div>
+                </motion.div>
+              </div>
+            </CardShell>
+          </section>
+
+          <section id="skills" className="scroll-section">
+            <CardShell className="section-shell skills-section-shell">
+              <div className="skills-showcase">
+                <div className="skills-visual-panel">
+                  <div className="skills-orbit-rail">
+                    {skillCards.map(({ title, icon: Icon, accent }) => (
+                      <span key={title} className={`skills-orbit-icon skills-orbit-icon-${accent}`}>
+                        <Icon className="h-4 w-4" />
+                      </span>
                     ))}
                   </div>
-                </motion.div>
-                <div className="hero-visual">
-                  <div className="hero-avatar-stack">
-                    <div className="hero-avatar-frame">
-                      <Image src={heroImage} alt="Jasmeet portrait" className="hero-avatar-image" priority />
+                  <div className="skills-visual-stage">
+                    <div className="skills-hand-glow" />
+                    <div className="skills-core-card">
+                      <div className="skills-core-ring" />
+                      <div className="skills-core-grid" />
                     </div>
-                    <div className="avatar-glow avatar-glow-cyan" />
-                    <div className="avatar-glow avatar-glow-violet" />
+                    <div className="skills-floating-icons">
+                      {skillCards.map(({ title, icon: Icon, accent }) => (
+                        <span key={title} className={`skills-floating-icon skills-floating-icon-${accent}`}>
+                          <Icon className="h-4 w-4" />
+                        </span>
+                      ))}
+                    </div>
                   </div>
-                  <div className="hero-journey">
-                    {timeline.map((item) => (
-                      <div key={item.year} className="mini-info-card">
-                        <p className="mini-info-year">{item.year}</p>
-                        <p className="mini-info-title">{item.title}</p>
+                </div>
+                <div className="skills-copy-panel">
+                  <p className="skills-kicker">Expertise</p>
+                  <h2 className="skills-title">My Skills</h2>
+                  <p className="skills-intro">
+                    I&apos;m a passionate web developer with experience building modern,
+                    responsive web applications. I specialize in frontend development using
+                    cutting-edge technologies to deliver exceptional user experiences.
+                  </p>
+                  <div className="skills-progress-list-reference">
+                    {skills.map((skill) => (
+                      <div key={skill.name} className="skill-progress-card skill-progress-card-reference">
+                        <div className="skill-progress-row skill-progress-row-reference">
+                          <span className="skill-name">{skill.name}</span>
+                          <span className="skill-value">{skill.level}%</span>
+                        </div>
+                        <div className="skill-track skill-track-reference">
+                          <div
+                            className={`skill-bar skill-bar-${skill.accent}`}
+                            style={{ width: `${skill.level}%` }}
+                          />
+                        </div>
                       </div>
                     ))}
                   </div>
@@ -305,72 +333,90 @@ export function PortfolioPage() {
             </CardShell>
           </section>
 
-          
-
-          <section id="skills" className="scroll-section">
-
-              <div className="dashboard-content">
-                <SectionHeading title="My Skills" description="A polished mix of frontend tooling and interface thinking, shown with compact cards and glowing progress bars." />
-                <div className="mini-skill-grid">
-                  {skillCards.map(({ title, subtitle, icon: Icon, accent }) => (
-                    <div key={title} className="mini-skill-card">
-                      <span className={`mini-skill-icon mini-skill-icon-${accent}`}><Icon className="h-5 w-5" /></span>
-                      <div>
-                        <h3 className="mini-card-title">{title}</h3>
-                        <p className="mini-card-copy">{subtitle}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-                <div className="skill-progress-list">
-                  {skills.map((skill) => (
-                    <div key={skill.name} className="skill-progress-card">
-                      <div className="skill-progress-row">
-                        <span className="skill-name">{skill.name}</span>
-                        <span className="skill-value">{skill.level}%</span>
-                      </div>
-                      <div className="skill-track">
-                        <div className={`skill-bar skill-bar-${skill.accent}`} style={{ width: `${skill.level}%` }} />
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-          </section>
-
-
           <section id="projects" className="scroll-section">
-              <div className="dashboard-content">
-                <SectionHeading title="My Portfolio" description="A collection of personal and client-facing concepts presented in the same sleek dashboard language." />
-                <div className="project-board">
+            <CardShell className="section-shell project-section-shell">
+              <div className="project-section-header">
+                <p className="project-section-kicker">Portfolio</p>
+                <h2 className="project-section-title">My Portfolio</h2>
+                <p className="project-section-copy">A collection of my recent projects</p>
+              </div>
+
+              <div className="project-board project-board-reference">
                   {projects.map((project, index) => (
                     <article key={project.title} className="project-thumb-card">
                       <div className={`project-preview project-preview-${project.accent}`}>
                         <div className="project-preview-grid" />
-                        <div className="project-preview-window">
-                          <div className="project-preview-bar" />
+                        <div className="project-preview-window project-preview-window-reference">
+                          <div className="project-preview-window-top">
+                            <div className="project-preview-bar" />
+                            <div className="project-preview-dots">
+                              <span />
+                              <span />
+                              <span />
+                            </div>
+                          </div>
                           <div className="project-preview-content" />
-                          <div className="project-preview-content small" />
+                          <div className="project-preview-columns">
+                            <div className="project-preview-content small" />
+                            <div className="project-preview-content small alt" />
+                          </div>
                         </div>
                         <span className="project-index">0{index + 1}</span>
                       </div>
-                      <h3 className="mini-card-title mt-3">{project.title}</h3>
-                      <p className="project-category">{project.category}</p>
+
+                      <div className="project-card-body project-card-body-reference">
+                        <div>
+                          <p className="project-status">{project.category}</p>
+                          <h3 className="mini-card-title">{project.title}</h3>
+                        </div>
+                        <p className="project-description">{project.description}</p>
+                        <div className="project-tags">
+                          {project.tags.map((tag) => (
+                            <span key={tag} className="project-tag">
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                        <div className="project-links project-links-compact">
+                          <a href={project.liveUrl} className="project-link-pill">
+                            Preview <ExternalLink className="h-3.5 w-3.5" />
+                          </a>
+                          <a href={project.caseStudyUrl} className="project-link-pill">
+                            Details <ArrowRight className="h-3.5 w-3.5" />
+                          </a>
+                        </div>
+                      </div>
                     </article>
                   ))}
-                </div>
               </div>
+            </CardShell>
           </section>
 
           <section id="education" className="scroll-section">
+            <CardShell className="section-shell">
+              <div className="section-head">
+                <SectionHeading
+                  title="Learning Path"
+                  description="Academic foundations, daily frontend practice, and continuous UI study all feed into how I approach real client-facing work."
+                />
+                <p className="section-note">
+                  I like combining formal study with small, frequent builds that sharpen
+                  decision-making.
+                </p>
+              </div>
+
               <div className="dashboard-content">
-                <SectionHeading title="Education" description="My learning path combines academic study, frontend building practice, and hands-on UI exploration." />
+                <div>
+                  <p className="section-eyebrow">Growth</p>
+                </div>
                 <div className="education-columns">
                   <div className="stack-list">
                     <p className="stack-heading">Education</p>
                     {education.map(({ title, subtitle, icon: Icon }) => (
                       <div key={title} className="info-tile">
-                        <span className="service-icon"><Icon className="h-4 w-4" /></span>
+                        <span className="service-icon">
+                          <Icon className="h-4 w-4" />
+                        </span>
                         <div>
                           <h3 className="mini-card-title">{title}</h3>
                           <p className="mini-card-copy">{subtitle}</p>
@@ -378,73 +424,156 @@ export function PortfolioPage() {
                       </div>
                     ))}
                   </div>
+
                   <div className="stack-list">
                     <p className="stack-heading">Certifications</p>
                     {certifications.map((item) => (
                       <div key={item} className="info-tile">
-                        <span className="service-icon"><ArrowRight className="h-4 w-4" /></span>
+                        <span className="service-icon">
+                          <ArrowRight className="h-4 w-4" />
+                        </span>
                         <div>
                           <h3 className="mini-card-title">{item}</h3>
-                          <p className="mini-card-copy">Continuous learning and practical implementation.</p>
+                          <p className="mini-card-copy">
+                            Continuous learning and practical implementation.
+                          </p>
                         </div>
                       </div>
                     ))}
                   </div>
                 </div>
               </div>
+            </CardShell>
           </section>
 
           <section id="contact" className="scroll-section">
-              <div className="dashboard-content">
-                <SectionHeading title="Languages & Contact" description="Communication, reachability, and collaboration details kept inside the same visual system." />
-                <div className="languages-card">
-                  {languages.map((item) => (
-                    <div key={item.name} className="language-row">
-                      <div><p className="mini-card-title">{item.name}</p><p className="mini-card-copy">Proficiency</p></div>
-                      <div className="language-meter">
-                        <div className="language-track"><div className="language-fill" style={{ width: `${item.level}%` }} /></div>
-                        <span className="skill-value">{item.level}%</span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-                <div className="contact-grid">
-                  {contactDetails.map(({ label, value, icon: Icon }) => (
-                    <div key={label} className="contact-detail-card">
-                      <span className="contact-detail-icon"><Icon className="h-4 w-4" /></span>
-                      <div><p className="mini-card-copy">{label}</p><p className="mini-card-title">{value}</p></div>
-                    </div>
-                  ))}
-                </div>
-                <form className="compact-contact-form">
-                  <input className="form-input" type="text" placeholder="Your Name" />
-                  <input className="form-input" type="email" placeholder="Email Address" />
-                  <textarea className="form-input min-h-28 resize-none" placeholder="Tell me about your project" />
-                  <button type="button" className="cta-primary justify-center">
-                    Send Message <Send className="h-4 w-4" />
-                  </button>
-                </form>
+            <CardShell className="section-shell">
+              <div className="section-head">
+                <SectionHeading
+                  title="Let’s Build Something Strong"
+                  description="If you need a portfolio, landing page, or polished frontend experience, I’m available to collaborate and refine the details with you."
+                />
+                <p className="section-note">
+                  Best for freelance projects, student portfolios, early-stage product UI, and
+                  redesign support.
+                </p>
               </div>
+
+              <div className="dashboard-content">
+                <div>
+                  <p className="section-eyebrow">Contact</p>
+                </div>
+                <div className="contact-layout">
+                  <div className="grid gap-4">
+                    <div className="languages-card">
+                      {languages.map((item) => (
+                        <div key={item.name} className="language-row">
+                          <div>
+                            <p className="mini-card-title">{item.name}</p>
+                            <p className="mini-card-copy">Proficiency</p>
+                          </div>
+                          <div className="language-meter">
+                            <div className="language-track">
+                              <div
+                                className="language-fill"
+                                style={{ width: `${item.level}%` }}
+                              />
+                            </div>
+                            <span className="skill-value">{item.level}%</span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+
+                    <div className="contact-grid">
+                      {contactDetails.map(({ label, value, icon: Icon }) => (
+                        <div key={label} className="contact-detail-card">
+                          <span className="contact-detail-icon">
+                            <Icon className="h-4 w-4" />
+                          </span>
+                          <div>
+                            <p className="mini-card-copy">{label}</p>
+                            <p className="mini-card-title">{value}</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="grid gap-4">
+                    <div className="availability-card">
+                      <p className="section-eyebrow">Availability</p>
+                      <h3 className="availability-title mt-3">
+                        Currently open for freelance and collaboration
+                      </h3>
+                      <p className="availability-copy">
+                        I can help shape a cleaner portfolio, responsive marketing page, or
+                        frontend implementation that feels more intentional than a basic template.
+                      </p>
+                    </div>
+
+                    <div className="quote-card">
+                      <p className="quote-mark">&ldquo;</p>
+                      <p className="quote-copy">
+                        The goal is simple: make the interface feel easy to trust, easy to use,
+                        and memorable after the first scroll.
+                      </p>
+                    </div>
+
+                    <form className="compact-contact-form">
+                      <input className="form-input" type="text" placeholder="Your Name" />
+                      <input className="form-input" type="email" placeholder="Email Address" />
+                      <textarea
+                        className="form-input min-h-28 resize-none"
+                        placeholder="Tell me about your project"
+                      />
+                      <button type="button" className="cta-primary justify-center">
+                        Send Message <Send className="h-4 w-4" />
+                      </button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </CardShell>
           </section>
-
-         
-
-      
-
 
           <section className="bottom-strip">
             <CardShell className="footer-panel">
               <div className="footer-copy">
-                <p className="panel-copy">Designed for Jasmeet with a modern dark portfolio style inspired by the reference layout.</p>
+                <p className="panel-copy">
+                  Designed to present Jasmeet as a thoughtful UI and frontend partner with stronger
+                  hierarchy, cleaner storytelling, and a more confident visual system.
+                </p>
                 <div className="footer-socials">
                   {socialLinks.map(({ label, href, icon: Icon }) => (
-                    <a key={label} href={href} aria-label={label} className="social-chip"><Icon className="h-4 w-4" /></a>
+                    <a
+                      key={label}
+                      href={href}
+                      aria-label={label}
+                      className="social-chip"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      <Icon className="h-4 w-4" />
+                    </a>
                   ))}
                 </div>
               </div>
               <div className="footer-links">
-                <a href="#projects" className="cta-secondary">Explore Projects <ExternalLink className="h-4 w-4" /></a>
-                <a href="#home" className="cta-secondary">Back to Top <ArrowRight className="h-4 w-4" /></a>
+                <button
+                  type="button"
+                  className="cta-secondary"
+                  onClick={() => scrollToSection('projects')}
+                >
+                  Explore Projects <ExternalLink className="h-4 w-4" />
+                </button>
+                <button
+                  type="button"
+                  className="cta-secondary"
+                  onClick={() => scrollToSection('home')}
+                >
+                  Back to Top <ArrowRight className="h-4 w-4" />
+                </button>
               </div>
             </CardShell>
           </section>

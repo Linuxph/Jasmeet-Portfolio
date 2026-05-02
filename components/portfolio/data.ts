@@ -28,10 +28,10 @@ export const navigationItems = [
 ]
 
 export const socialLinks = [
-  { label: 'Instagram', href: '#', icon: Instagram },
-  { label: 'GitHub', href: '#', icon: Github },
-  { label: 'LinkedIn', href: '#', icon: Linkedin },
-  { label: 'WhatsApp', href: '#', icon: MessageCircle },
+  { label: 'Instagram', href: 'https://instagram.com', icon: Instagram },
+  { label: 'GitHub', href: 'https://github.com', icon: Github },
+  { label: 'LinkedIn', href: 'https://linkedin.com', icon: Linkedin },
+  { label: 'WhatsApp', href: 'https://wa.me/919876543210', icon: MessageCircle },
 ]
 
 export const heroBadges = [
@@ -43,7 +43,7 @@ export const heroBadges = [
 export const stats = [
   { value: '04+', label: 'Years of interface practice' },
   { value: '20+', label: 'Responsive builds shipped' },
-  { value: '12+', label: 'Design ideas turned live' },
+  { value: '12+', label: 'Design concepts turned live' },
 ]
 
 export const services = [
@@ -78,6 +78,8 @@ export const skills = [
   { name: 'Tailwind CSS', level: 92, accent: 'orange' },
   { name: 'JavaScript', level: 90, accent: 'violet' },
   { name: 'Next.js', level: 88, accent: 'cyan' },
+  { name: 'Figma', level: 84, accent: 'orange' },
+  { name: 'UI Systems', level: 86, accent: 'violet' },
 ]
 
 export const skillCards = [
@@ -89,32 +91,58 @@ export const skillCards = [
 
 export const projects = [
   {
-    title: 'Creator Portfolio',
-    category: 'Personal Brand',
-    description: 'A dark personal site with glowing cards, section navigation, and a cleaner story-driven layout.',
-    tags: ['Next.js', 'Motion', 'UI'],
+    title: 'Modern E-Commerce Platform',
+    category: 'Build Complete',
+    description: 'A modern commerce experience with bold visuals, product discovery, and responsive shopping flows.',
+    tags: ['Next.js', 'Tailwind CSS', 'Responsive'],
     accent: 'cyan',
+    liveUrl: '#',
+    caseStudyUrl: '#contact',
   },
   {
-    title: 'Storefront Concept',
-    category: 'Commerce UI',
-    description: 'A modern product showcase using strong hierarchy, polished cards, and conversion-friendly sections.',
-    tags: ['E-commerce', 'Branding', 'Responsive'],
+    title: 'Task Management App',
+    category: 'Build Complete',
+    description: 'A productivity dashboard with a clean board system, quick actions, and user-friendly component states.',
+    tags: ['React', 'Tailwind CSS', 'UI'],
     accent: 'orange',
+    liveUrl: '#',
+    caseStudyUrl: '#contact',
   },
   {
-    title: 'Dashboard Concept',
-    category: 'Product Interface',
-    description: 'A sleek admin concept using compact data cards, clear hierarchy, and neon-accent surfaces.',
-    tags: ['Dashboard', 'Cards', 'Components'],
+    title: 'Weather Dashboard',
+    category: 'Build Complete',
+    description: 'A data-first weather interface with concise summaries, forecast modules, and clean visual hierarchy.',
+    tags: ['Dashboard', 'API', 'Components'],
     accent: 'violet',
+    liveUrl: '#',
+    caseStudyUrl: '#contact',
   },
   {
-    title: 'Agency Website',
-    category: 'Studio Presence',
-    description: 'A presentation-focused website for a creative team with bold hero sections and portfolio previews.',
-    tags: ['Agency', 'Case Study', 'SEO'],
+    title: 'Course Landing Page',
+    category: 'Build Complete',
+    description: 'A focused landing page for course promotion with structured sections and strong conversion cues.',
+    tags: ['Landing Page', 'Branding', 'SEO'],
+    accent: 'orange',
+    liveUrl: '#',
+    caseStudyUrl: '#contact',
+  },
+  {
+    title: 'Creative Agency Website',
+    category: 'Build Complete',
+    description: 'A studio showcase with portfolio previews, service storytelling, and a confident art-direction system.',
+    tags: ['Agency', 'Case Study', 'Responsive'],
     accent: 'cyan',
+    liveUrl: '#',
+    caseStudyUrl: '#contact',
+  },
+  {
+    title: 'LMS Platform UI',
+    category: 'Build Complete',
+    description: 'An educational product interface with dashboard widgets, lesson cards, and a scalable UI structure.',
+    tags: ['EdTech', 'UI Design', 'Next.js'],
+    accent: 'cyan',
+    liveUrl: '#',
+    caseStudyUrl: '#contact',
   },
 ]
 
