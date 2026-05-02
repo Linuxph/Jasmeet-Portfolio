@@ -23,7 +23,6 @@ import {
   navigationItems,
   projects,
   services,
-  skillCards,
   skills,
   socialLinks,
 } from '@/components/portfolio/data'
@@ -90,11 +89,14 @@ export function PortfolioPage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [activeSection, setActiveSection] = useState('home')
   const horizontalShowcaseRef = useRef<HTMLElement | null>(null)
+  const horizontalStickyRef = useRef<HTMLDivElement | null>(null)
+  const horizontalTrackRef = useRef<HTMLDivElement | null>(null)
+  const [horizontalScrollWidth, setHorizontalScrollWidth] = useState(0)
   const { scrollYProgress } = useScroll({
     target: horizontalShowcaseRef,
     offset: ['start start', 'end end'],
   })
-  const horizontalTrackX = useTransform(scrollYProgress, [0, 1], ['0%', '-50%'])
+  const horizontalTrackX = useTransform(scrollYProgress, [0, 1], [0, -horizontalScrollWidth])
   const horizontalGlowX = useTransform(scrollYProgress, [0, 1], ['0%', '-18%'])
 
   const scrollToSection = (sectionId: string) => {
@@ -168,6 +170,37 @@ export function PortfolioPage() {
     window.addEventListener('resize', onResize)
     return () => window.removeEventListener('resize', onResize)
   }, [mobileMenuOpen])
+
+  useEffect(() => {
+    const measureHorizontalScroll = () => {
+      const sticky = horizontalStickyRef.current
+      const track = horizontalTrackRef.current
+
+      if (!sticky || !track) return
+
+      const nextWidth = Math.max(0, track.scrollWidth - sticky.clientWidth)
+      setHorizontalScrollWidth(nextWidth)
+    }
+
+    measureHorizontalScroll()
+
+    const resizeObserver =
+      typeof ResizeObserver !== 'undefined'
+        ? new ResizeObserver(() => {
+            measureHorizontalScroll()
+          })
+        : null
+
+    if (horizontalStickyRef.current) resizeObserver?.observe(horizontalStickyRef.current)
+    if (horizontalTrackRef.current) resizeObserver?.observe(horizontalTrackRef.current)
+
+    window.addEventListener('resize', measureHorizontalScroll)
+
+    return () => {
+      resizeObserver?.disconnect()
+      window.removeEventListener('resize', measureHorizontalScroll)
+    }
+  }, [])
 
   return (
     <main className="portfolio-page">
@@ -289,35 +322,23 @@ export function PortfolioPage() {
             <CardShell className="section-shell skills-section-shell">
               <div className="skills-showcase">
                 <div className="skills-visual-panel">
-                  <div className="skills-orbit-rail">
-                    {skillCards.map(({ title, icon: Icon, accent }) => (
-                      <span key={title} className={`skills-orbit-icon skills-orbit-icon-${accent}`}>
-                        <Icon className="h-4 w-4" />
-                      </span>
-                    ))}
-                  </div>
                   <div className="skills-visual-stage">
-                    <div className="skills-hand-glow" />
-                    <div className="skills-core-card">
-                      <div className="skills-core-ring" />
-                      <div className="skills-core-grid" />
-                    </div>
-                    <div className="skills-floating-icons">
-                      {skillCards.map(({ title, icon: Icon, accent }) => (
-                        <span key={title} className={`skills-floating-icon skills-floating-icon-${accent}`}>
-                          <Icon className="h-4 w-4" />
-                        </span>
-                      ))}
-                    </div>
+                    <Image
+                      src="/skills-creative-tools.png"
+                      alt="Creative tools floating above a robotic hand"
+                      fill
+                      className="skills-visual-image"
+                      sizes="(max-width: 1024px) 100vw, 45vw"
+                    />
                   </div>
                 </div>
                 <div className="skills-copy-panel">
                   <p className="skills-kicker">Expertise</p>
                   <h2 className="skills-title">My Skills</h2>
                   <p className="skills-intro">
-                    I&apos;m a passionate web developer with experience building modern,
-                    responsive web applications. I specialize in frontend development using
-                    cutting-edge technologies to deliver exceptional user experiences.
+                    I work across graphic design, brand visuals, and video editing tools to
+                    build polished creative assets for social media, print, campaigns, and
+                    presentation-ready client work.
                   </p>
                   <div className="skills-progress-list-reference">
                     {skills.map((skill) => (
@@ -340,10 +361,22 @@ export function PortfolioPage() {
             </CardShell>
           </section>
 
-      <section ref={horizontalShowcaseRef} className="horizontal-scroll-section">
-        <div className="horizontal-scroll-sticky">
-          <motion.div className="horizontal-scroll-track" style={{ x: horizontalTrackX }}>
-            <section id="projects" className="scroll-section">
+      <section
+        ref={horizontalShowcaseRef}
+        className="horizontal-scroll-section"
+        style={
+          horizontalScrollWidth > 0
+            ? { height: `calc(100vh + ${horizontalScrollWidth}px)` }
+            : undefined
+        }
+      >
+        <div ref={horizontalStickyRef} className="horizontal-scroll-sticky">
+          <motion.div
+            ref={horizontalTrackRef}
+            className="horizontal-scroll-track"
+            style={{ x: horizontalTrackX }}
+          >
+            <section id="projects" className="horizontal-panel horizontal-panel-projects">
               <CardShell className="section-shell project-section-shell">
                 <div className="project-section-header">
                   <p className="project-section-kicker">Portfolio</p>

@@ -527,57 +527,12 @@
   }
 
   .skills-visual-panel {
-    @apply grid items-center gap-4 sm:grid-cols-[64px_1fr];
-  }
-
-  .skills-orbit-rail {
-    @apply hidden h-full items-center justify-center rounded-[2rem] border border-sky-400/12 bg-[rgba(9,20,39,0.82)] p-3 shadow-[0_0_28px_rgba(37,168,255,0.12)] sm:flex;
-    min-height: 18rem;
-  }
-
-  .skills-orbit-rail {
-    flex-direction: column;
-    gap: 0.95rem;
-  }
-
-  .skills-orbit-icon,
-  .skills-floating-icon {
-    @apply inline-flex items-center justify-center rounded-full border border-white/10 bg-white/6 text-white;
-  }
-
-  .skills-orbit-icon {
-    width: 2.4rem;
-    height: 2.4rem;
-  }
-
-  .skills-floating-icon {
-    position: absolute;
-    width: 2.2rem;
-    height: 2.2rem;
-    backdrop-filter: blur(10px);
-  }
-
-  .skills-orbit-icon-cyan,
-  .skills-floating-icon-cyan {
-    box-shadow: 0 0 22px rgba(32, 191, 255, 0.18);
-    color: #7edbff;
-  }
-
-  .skills-orbit-icon-orange,
-  .skills-floating-icon-orange {
-    box-shadow: 0 0 22px rgba(255, 184, 111, 0.16);
-    color: #ffd3a2;
-  }
-
-  .skills-orbit-icon-violet,
-  .skills-floating-icon-violet {
-    box-shadow: 0 0 22px rgba(149, 167, 255, 0.18);
-    color: #dbe3ff;
+    @apply block;
   }
 
   .skills-visual-stage {
     position: relative;
-    min-height: 18rem;
+    min-height: 22rem;
     overflow: hidden;
     border-radius: 1.8rem;
     border: 1px solid rgba(74, 182, 255, 0.1);
@@ -587,71 +542,10 @@
       linear-gradient(180deg, rgba(12, 21, 39, 0.98), rgba(7, 15, 28, 0.98));
   }
 
-  .skills-hand-glow {
+  .skills-visual-image {
     position: absolute;
-    left: 18%;
-    right: 18%;
-    bottom: 20%;
-    height: 3.8rem;
-    border-radius: 999px;
-    background: linear-gradient(90deg, rgba(83, 155, 255, 0.16), rgba(166, 102, 255, 0.3), rgba(122, 231, 199, 0.16));
-    filter: blur(20px);
-  }
-
-  .skills-core-card {
-    position: absolute;
-    left: 50%;
-    top: 56%;
-    width: 11rem;
-    height: 4.75rem;
-    transform: translate(-50%, -50%) perspective(700px) rotateX(58deg) rotateZ(-15deg);
-    border-radius: 1rem;
-    border: 1px solid rgba(122, 231, 199, 0.14);
-    background:
-      linear-gradient(135deg, rgba(60, 160, 255, 0.18), rgba(255, 255, 255, 0.04)),
-      linear-gradient(180deg, rgba(11, 23, 42, 0.96), rgba(7, 14, 27, 0.96));
-    box-shadow:
-      0 14px 30px rgba(0, 0, 0, 0.28),
-      0 0 36px rgba(37, 168, 255, 0.14);
-  }
-
-  .skills-core-ring {
-    position: absolute;
-    inset: 0.7rem 2.1rem;
-    border-radius: 999px;
-    border: 1px solid rgba(122, 231, 199, 0.32);
-    box-shadow: 0 0 26px rgba(122, 231, 199, 0.16);
-  }
-
-  .skills-core-grid {
-    position: absolute;
-    inset: 0.65rem;
-    border-radius: 0.8rem;
-    opacity: 0.18;
-    background-image:
-      linear-gradient(rgba(255, 255, 255, 0.34) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255, 255, 255, 0.34) 1px, transparent 1px);
-    background-size: 18px 18px;
-  }
-
-  .skills-floating-icons span:nth-child(1) {
-    left: 18%;
-    top: 24%;
-  }
-
-  .skills-floating-icons span:nth-child(2) {
-    left: 36%;
-    top: 12%;
-  }
-
-  .skills-floating-icons span:nth-child(3) {
-    right: 24%;
-    top: 16%;
-  }
-
-  .skills-floating-icons span:nth-child(4) {
-    right: 14%;
-    top: 34%;
+    object-fit: cover;
+    object-position: center;
   }
 
   .skills-copy-panel {
@@ -790,11 +684,14 @@
   }
 
   .project-section-shell {
-    @apply gap-5;
+    @apply grid w-full gap-5;
+    min-height: 78vh;
+    align-content: center;
+    padding: 2rem;
   }
 
   .project-section-header {
-    @apply text-center;
+    @apply mx-auto max-w-2xl text-center;
   }
 
   .project-section-kicker {
@@ -811,7 +708,7 @@
   }
 
   .project-board-reference {
-    @apply gap-4 md:grid-cols-2 xl:grid-cols-3;
+    @apply mx-auto w-full max-w-6xl gap-4 md:grid-cols-2 xl:grid-cols-3;
   }
 
   .project-thumb-card {
@@ -1049,7 +946,7 @@
 
   .horizontal-scroll-section {
     position: relative;
-    height: 220vh;
+    min-height: 100vh;
   }
 
   .horizontal-scroll-sticky {
@@ -1063,7 +960,7 @@
 
   .horizontal-scroll-track {
     display: flex;
-    width: 200vw;
+    width: max-content;
     gap: 1.5rem;
     padding-right: 1.5rem;
   }
@@ -1075,6 +972,10 @@
     display: flex;
     align-items: center;
     padding: 2rem 0;
+  }
+
+  .horizontal-panel-projects {
+    align-items: stretch;
   }
 
   .horizontal-panel-shell {
@@ -1427,12 +1328,8 @@
       @apply grid-cols-1;
     }
 
-    .skills-orbit-rail {
-      @apply hidden;
-    }
-
     .skills-visual-stage {
-      min-height: 15rem;
+      min-height: 18rem;
     }
 
     .horizontal-visual-stage {

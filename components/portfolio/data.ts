@@ -1,19 +1,15 @@
 import {
   BriefcaseBusiness,
-  BrainCircuit,
   ChartNoAxesColumn,
   Code2,
-  Figma,
   FolderKanban,
   Github,
   GraduationCap,
   House,
   Instagram,
-  LaptopMinimal,
   Linkedin,
   Mail,
   MessageCircle,
-  ScrollText,
   Palette,
   Phone,
   Rocket,
@@ -74,19 +70,12 @@ export const services = [
 ]
 
 export const skills = [
-  { name: 'React', level: 95, accent: 'cyan' },
-  { name: 'Tailwind CSS', level: 92, accent: 'orange' },
-  { name: 'JavaScript', level: 90, accent: 'violet' },
-  { name: 'Next.js', level: 88, accent: 'cyan' },
-  { name: 'Figma', level: 84, accent: 'orange' },
-  { name: 'UI Systems', level: 86, accent: 'violet' },
-]
-
-export const skillCards = [
-  { title: 'React', subtitle: 'Interactive UI', icon: Code2, accent: 'cyan' },
-  { title: 'Next.js', subtitle: 'App Router', icon: LaptopMinimal, accent: 'orange' },
-  { title: 'Figma', subtitle: 'Wireframes & flows', icon: Figma, accent: 'violet' },
-  { title: 'UI Thinking', subtitle: 'Clean visual structure', icon: BrainCircuit, accent: 'cyan' },
+  { name: 'Photoshop', level: 95, accent: 'cyan' },
+  { name: 'Illustrator', level: 93, accent: 'orange' },
+  { name: 'Corel Draw', level: 90, accent: 'violet' },
+  { name: 'Premier Pro', level: 88, accent: 'cyan' },
+  { name: 'After Effects', level: 86, accent: 'orange' },
+  { name: 'Canva', level: 96, accent: 'violet' },
 ]
 
 export const projects = [
@@ -178,7 +167,7 @@ export const education = [
   {
     title: 'Self-Led UI Exploration',
     subtitle: 'Daily practice around layout references, section systems, and polished portfolio presentation.',
-    icon: ScrollText,
+    icon: Palette,
   },
 ]
 
