@@ -19,7 +19,6 @@ export const navigationItems = [
   { id: 'home', label: 'Home', icon: House },
   { id: 'skills', label: 'Skills', icon: Code2 },
   { id: 'projects', label: 'Projects', icon: FolderKanban },
-  { id: 'education', label: 'Education', icon: GraduationCap },
   { id: 'contact', label: 'Contact', icon: Mail },
 ]
 
@@ -80,7 +79,7 @@ export const skills = [
 
 export const projects = [
   {
-    title: 'Luxury Skincare Brand Kit',
+    title: 'V-One hospitals Rebrand',
     category: 'Brand Identity',
     description: 'A premium packaging and campaign system with soft gradients, refined typography, and social-ready brand assets.',
     tags: ['Brand Design', 'Packaging', 'Campaign'],
@@ -89,7 +88,7 @@ export const projects = [
     caseStudyUrl: '#contact',
   },
   {
-    title: 'Festival Poster Series',
+    title: 'Anandam Hospitals Poster Series',
     category: 'Print Design',
     description: 'A bold editorial poster collection built around layered texture, expressive typography, and high-contrast compositions.',
     tags: ['Poster Design', 'Typography', 'Art Direction'],
@@ -98,7 +97,7 @@ export const projects = [
     caseStudyUrl: '#contact',
   },
   {
-    title: 'Cafe Social Media Pack',
+    title: 'DNS Hospital Social Campaign',
     category: 'Social Content',
     description: 'A playful rollout of launch graphics, reel covers, and promo carousels designed for consistent mobile-first branding.',
     tags: ['Instagram', 'Campaign Design', 'Templates'],
@@ -107,7 +106,7 @@ export const projects = [
     caseStudyUrl: '#contact',
   },
   {
-    title: 'Wedding Invite Collection',
+    title: 'Shell Be hospital social media templates',
     category: 'Invitation Design',
     description: 'A romantic invitation suite with floral layouts, elegant serif pairings, and coordinated print-ready assets.',
     tags: ['Invitation', 'Print Layout', 'Luxury Styling'],
@@ -116,19 +115,10 @@ export const projects = [
     caseStudyUrl: '#contact',
   },
   {
-    title: 'Fashion Lookbook Layout',
+    title: 'Apollo Hospital Lookbook',
     category: 'Editorial Design',
     description: 'A high-fashion brochure concept mixing image rhythm, whitespace, and curated text blocks into a polished visual story.',
     tags: ['Lookbook', 'Editorial', 'Layout System'],
-    accent: 'cyan',
-    liveUrl: '#',
-    caseStudyUrl: '#contact',
-  },
-  {
-    title: 'YouTube Thumbnail Suite',
-    category: 'Content Design',
-    description: 'A set of expressive thumbnails designed to improve click-through with punchy type, framing, and color contrast.',
-    tags: ['Thumbnail Design', 'YouTube', 'Visual Strategy'],
     accent: 'cyan',
     liveUrl: '#',
     caseStudyUrl: '#contact',
