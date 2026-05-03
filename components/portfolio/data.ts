@@ -105,24 +105,6 @@ export const projects = [
     liveUrl: '#',
     caseStudyUrl: '#contact',
   },
-  {
-    title: 'Shell Be hospital social media templates',
-    category: 'Invitation Design',
-    description: 'A romantic invitation suite with floral layouts, elegant serif pairings, and coordinated print-ready assets.',
-    tags: ['Invitation', 'Print Layout', 'Luxury Styling'],
-    accent: 'orange',
-    liveUrl: '#',
-    caseStudyUrl: '#contact',
-  },
-  {
-    title: 'Apollo Hospital Lookbook',
-    category: 'Editorial Design',
-    description: 'A high-fashion brochure concept mixing image rhythm, whitespace, and curated text blocks into a polished visual story.',
-    tags: ['Lookbook', 'Editorial', 'Layout System'],
-    accent: 'cyan',
-    liveUrl: '#',
-    caseStudyUrl: '#contact',
-  },
 ]
 
 export const timeline = [

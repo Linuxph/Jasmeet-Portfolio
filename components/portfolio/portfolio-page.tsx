@@ -655,10 +655,6 @@ export function PortfolioPage() {
            <section className="bottom-strip">
              <CardShell className="footer-panel">
                <div className="footer-copy">
-                 <p className="panel-copy">
-                   Designed to present Jasmeet as a thoughtful UI and frontend partner with stronger
-                   hierarchy, cleaner storytelling, and a more confident visual system.
-                 </p>
                  <div className="footer-socials">
                    {socialLinks.map(({ label, href, icon: Icon }) => (
                     <a
